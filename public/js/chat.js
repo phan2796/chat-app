@@ -18,6 +18,16 @@ function scrollToBottom() {
 }
 socket.on('connect', function () {
   console.log('Connected to server');
+  var params = params_unserialize(window.location.search);
+
+  socket.emit('join', params, function (err) {
+    if (err) {
+      alert(err);
+      window.location.href = '/';
+    } else {
+      console.log('no err');
+    }
+  })
 });
 
 socket.on('disconnect', function () {
@@ -89,3 +99,15 @@ locationButton.on('click', function () {
     alert('Unable to fetch location.');
   });
 });
+
+function params_unserialize(p) {
+  var ret = {},
+    seg = p.replace(/^\?/, '').split('&'),
+    len = seg.length, i = 0, s;
+  for (; i < len; i++) {
+    if (!seg[i]) { continue; }
+    s = seg[i].split('=');
+    ret[s[0]] = s[1];
+  }
+  return ret;
+}
