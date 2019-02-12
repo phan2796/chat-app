@@ -1,8 +1,8 @@
-[{
-  id: '/123abc',
-  name: 'Phan',
-  room: 'The office fans'
-}]
+// [{
+//   id: '/123abc',
+//   name: 'Phan',
+//   room: 'The office fans'
+// }]
 
 class Users {
   constructor() {
@@ -12,6 +12,23 @@ class Users {
     const user = { id, name, room };
     this.users.push(user);
     return user;
+  }
+  removeUser(id) {
+    const user = this.getUser(id);
+    if (user) {
+      this.users = this.users.filter((user) => user.id !== id);
+    }
+    return user
+  }
+
+  getUser(id) {
+    return this.users.filter((user) => user.id == id)[0];
+  }
+  getUserList(room) {
+    const listUser = this.users.filter((user) => user.room == room);
+    const listUsername = listUser.map((user) => user.name);
+
+    return listUsername;
   }
 }
 
