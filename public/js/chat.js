@@ -16,7 +16,7 @@ function scrollToBottom() {
   }
 
 }
-socket.on('connect', function () {
+socket.on('connect', () => {
   console.log('Connected to server');
   var params = params_unserialize(window.location.search);
 
@@ -30,11 +30,21 @@ socket.on('connect', function () {
   })
 });
 
-socket.on('disconnect', function () {
+socket.on('disconnect', () => {
   console.log('Disconnected from server');
 });
 
-socket.on('newMessage', function (message) {
+socket.on('updateUserList', (users) => {
+  console.log('User list', users)
+  let ol = jQuery('<ol></ol>');
+
+  users.forEach(user => {
+    ol.append(jQuery('<li></li>').text(user))
+  });
+
+  jQuery('#users').html(ol);
+})
+socket.on('newMessage', (message) => {
   const formattedTime = moment(message.createdAt).format('h:mm a');
   const tpl = jQuery('#message-tpl').html();
   const html = Mustache.render(tpl, {
@@ -46,9 +56,7 @@ socket.on('newMessage', function (message) {
   scrollToBottom();
 });
 
-socket.on('newLocationMessage', function (message) {
-
-
+socket.on('newLocationMessage', (message) => {
   const formattedTime = moment(message.createdAt).format('h:mm a');
   const tpl = jQuery('#location-tpl').html();
   const html = Mustache.render(tpl, {
@@ -67,7 +75,7 @@ socket.on('newLocationMessage', function (message) {
   // jQuery('#messages').append(li);
 });
 
-jQuery('#message-form').on('submit', function (e) {
+jQuery('#message-form').on('submit', (e) => {
   e.preventDefault();
 
   const messageTextbox = jQuery('[name=message]');
