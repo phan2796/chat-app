@@ -79,13 +79,14 @@ jQuery('#message-form').on('submit', (e) => {
   e.preventDefault();
 
   const messageTextbox = jQuery('[name=message]');
-
-  socket.emit('createMessage', {
-    from: 'User',
-    text: messageTextbox.val()
-  }, function () {
-    messageTextbox.val('')
-  });
+  if (messageTextbox.val()) {
+    socket.emit('createMessage', {
+      from: 'User',
+      text: messageTextbox.val()
+    }, function () {
+      messageTextbox.val('')
+    });
+  }
 });
 
 const locationButton = jQuery('#send-location');
